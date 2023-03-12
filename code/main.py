@@ -393,7 +393,7 @@ if __name__ == "__main__":
     
     
     if hard_file:
-        base_location = 'F:/UNSW/2022/T2_2022/COMP9414/Assignment_2/'
+        base_location = 'F:/'
         os.chdir(base_location)
         excel_file = base_location + 'reviews.tsv'
         
