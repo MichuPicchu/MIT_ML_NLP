@@ -1,4 +1,4 @@
-# ML_sentiment_analysis
+# ML_NLP
 
 ## MIT assignment: Rating Prediction (Supervised Learning)
 
