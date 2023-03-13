@@ -11,41 +11,27 @@ import seaborn as sns
 import sys
 from nltk.stem.porter import *
 
-
+#Filter #1 - filters given sentence by removing tags, symbols, and short words, and returns the filtered sentence.
 def sentence_filter(sentence):
-    '''1. replace the following with spaces --, ~, ...'''
-
-    sentence = re.sub('\-{2,}|\.{3,}|\~',' ', sentence)
     
-    '''2. remove tags <words> and all other symbols'''
-    
-    #remove tags
-    sentence = re.sub('<(.*?)+>', '', sentence)
-    #deleting all other symbols
-    sentence = re.sub('[^A-Za-z0-9 \/\-\$\%]+','', sentence)
-    
-    '''3. filter each word to be more than 2 letters,numbers,specific symbols (/-$%)'''
-    output = sentence.split()
-    output = [x for x in output if len(x) >= 2]
-    
+    sentence = re.sub('\-{2,}|\.{3,}|\~',' ', sentence) # replace special characters with spaces
+    sentence = re.sub('<(.*?)+>', '', sentence) # remove tags
+    sentence = re.sub('[^A-Za-z0-9 \/\-\$\%]+','', sentence) # remove all other symbols
+    output = sentence.split() 
+    output = [x for x in output if len(x) >= 2] # filter each word to be more than 2 letters, numbers, specific symbols (/-$%)
     return ' '.join(output)
 
-
+#Filters #2 - filters given sentence by removing tags, symbols, and short words, and returns the filtered sentence.
 def special_sentence_filter(sentence):
-    sentence = re.sub('\-{2,}|\.{3,}|\~',' ', sentence)
-    
-    #remove tags
-    sentence = re.sub('<(.*?)+>', '', sentence)
-    #deleting all other symbols
-    sentence = re.sub('[^A-Za-z \/\-\$\%]+',' ', sentence)
-    
+
+    sentence = re.sub('\-{2,}|\.{3,}|\~',' ', sentence) # replace special characters with spaces
+    sentence = re.sub('<(.*?)+>', '', sentence) # remove tags
+    sentence = re.sub('[^A-Za-z \/\-\$\%]+',' ', sentence) # remove all other symbols except spaces
     output = sentence.split()
-    # print(output)
-    output = [x for x in output if len(x) >= 3]
-    
+    output = [x for x in output if len(x) >= 3] # filter each word to be more than 3 letters
     return ' '.join(output)
     
-
+#Predicts the target variable based on a given model and evaluates the model performance using various classification metrics and returns a report or the predicted target values.
 def predict_and_test(model, X_test_bag_of_words, y_test, output = 'report'):
     num_dec_point = 3
     predicted_y = model.predict(X_test_bag_of_words)
@@ -81,6 +67,7 @@ def print_output(index_list, result_list):
     for x in range(len(result_list)):
         print(f'{index_list[x]} {result_list[x]}')
 
+#trains the bnb model and returns the model
 def bnb(X_train, X_test, y_train, y_test, output = 'report'):
     if output == 'report':
             print("----bnb standard")
@@ -94,6 +81,7 @@ def bnb(X_train, X_test, y_train, y_test, output = 'report'):
     
     return result
 
+#performs sentiment analysis using Bernoulli Naive Bayes classifier with a bag-of-words approach and returns the classification result. It uses the top 1000 most frequent words in the training set as features
 def bnb_top_1000(X_train, X_test, y_train, y_test, output = 'report'):
     if output == 'report':
             print("----bnb top 1000 words")
@@ -107,6 +95,7 @@ def bnb_top_1000(X_train, X_test, y_train, y_test, output = 'report'):
     
     return result
 
+#This function performs BNB classification on lowercase text data using a count vectorizer.
 def bnb_lowercase(X_train, X_test, y_train, y_test, output = 'report'):
     if output == 'report':
             print("----bnb lowercase")
@@ -120,6 +109,7 @@ def bnb_lowercase(X_train, X_test, y_train, y_test, output = 'report'):
     
     return result
 
+#This function performs BNB classification on data using a count vectorizer and Porter Stemmer.
 def bnb_porterstem(X_train, X_test, y_train, y_test, output = 'report'):
     if output == 'report':
             print("----bnb porterstem")
@@ -137,6 +127,7 @@ def bnb_porterstem(X_train, X_test, y_train, y_test, output = 'report'):
     
     return result
 
+#This function performs MNB classification on data using a count vectorizer.
 def mnb(X_train, X_test, y_train, y_test, output = 'report'):
     if output == 'report':
             print("----mnb standard")
@@ -150,6 +141,7 @@ def mnb(X_train, X_test, y_train, y_test, output = 'report'):
     
     return result
 
+#This function performs MNB classification on data using a count vectorizer, and top 1000 words.
 def mnb_top_1000(X_train, X_test, y_train, y_test, output = 'report'):
     if output == 'report':
             print("----mnb top 1000 words")
@@ -163,6 +155,7 @@ def mnb_top_1000(X_train, X_test, y_train, y_test, output = 'report'):
     
     return result
 
+#This function performs MNB classification on lowercase data data using a count vectorizer.
 def mnb_lowercase(X_train, X_test, y_train, y_test, output = 'report'):
     if output == 'report':
             print("----mnb lowercase")
@@ -176,6 +169,7 @@ def mnb_lowercase(X_train, X_test, y_train, y_test, output = 'report'):
     
     return result
 
+#This function performs MNB classification on data using a count vectorizer, and Porter Stemmer.
 def mnb_porterstem(X_train, X_test, y_train, y_test, output = 'report'):
     if output == 'report':
             print("----mnb porter stem")
@@ -193,6 +187,7 @@ def mnb_porterstem(X_train, X_test, y_train, y_test, output = 'report'):
     
     return result
 
+#This function performs DT classification on data using a count vectorizer.
 def dt(X_train, X_test, y_train, y_test, output = 'report'):
     # if random_state id not set. the feaures are randomised, therefore tree may be different each time
     if output == 'report':
@@ -210,9 +205,11 @@ def dt(X_train, X_test, y_train, y_test, output = 'report'):
     
     return result
 
+#This function performs DT classification on data using a count vectorizer, without the 1% criterion.
 def dt_without_1(X_train, X_test, y_train, y_test, output = 'report'):
-    # if random_state id not set. the feaures are randomised, therefore tree may be different each time
+    # if random_state id not set. the features are randomised, therefore tree may be different each time
     print("----dt without 1% criterion")
+    
     # create count vectorizer and fit it with training data
     count = CountVectorizer(lowercase = False, max_features=1000, token_pattern = r'(?u)[a-zA-Z0-9-/$%]{2,}')
     X_train_bag_of_words = count.fit_transform(X_train)
@@ -223,6 +220,7 @@ def dt_without_1(X_train, X_test, y_train, y_test, output = 'report'):
     
     return result
 
+#This function performs DT classification on lowercase data using a count vectorizer.
 def dt_lowercase(X_train, X_test, y_train, y_test, output = 'report'):
     # if random_state id not set. the feaures are randomised, therefore tree may be different each time
     print("----dt lowercase")
@@ -236,6 +234,7 @@ def dt_lowercase(X_train, X_test, y_train, y_test, output = 'report'):
     
     return result
 
+#This function performs DT classification on data using a count vectorizer and Porter Stemmer.
 def dt_porterstem(X_train, X_test, y_train, y_test, output = 'report'):
     # if random_state id not set. the feaures are randomised, therefore tree may be different each time
     if output == 'report':
@@ -254,6 +253,7 @@ def dt_porterstem(X_train, X_test, y_train, y_test, output = 'report'):
     
     return result
 
+#This function performs classification using my best model on the data given, decided from previous models.
 def my_model(X_train, X_test, y_train, y_test, output = 'report', clf = MultinomialNB()):
     print("----My model")
     
@@ -286,6 +286,7 @@ def my_model_modified(X_train, X_test, y_train, y_test, output = 'report', clf =
     result = predict_and_test(model, X_test_bag_of_words, y_test, output)
     return result
 
+#sentiment transformation
 def sentiment_transform(df):
     def new_class_distribution(number):
         if number in [1,2,3]:
@@ -297,7 +298,7 @@ def sentiment_transform(df):
     
     df['sentiment'] = df['rating'].apply(lambda x: new_class_distribution(x)) #apply lambda filter to column
 
-
+#plots the classification reports
 def plot_classification_report(y_tru, y_prd, figsize=(10, 10), ax=None):
 
     plt.figure(figsize=figsize)
@@ -324,6 +325,7 @@ def plot_classification_report(y_tru, y_prd, figsize=(10, 10), ax=None):
     res.set_xticklabels(res.get_xmajorticklabels(), fontsize = 26)
     res.set_yticklabels(res.get_ymajorticklabels(), fontsize = 26, rotation = 45)
 
+#plots double classification report
 def plot_double_result(rA, rB, title, legend_1, legend_2):
     result_A = rA[0] + rA[1]
     result_A = [100*x for x in result_A]
@@ -370,6 +372,7 @@ def plot_double_result(rA, rB, title, legend_1, legend_2):
     plt.tight_layout()
     plt.show()
 
+#shows the distribution of classes
 def plot_class_distribution(y_test):
     unique, count = np.unique(y_test,return_counts = True)
     plt.figure()
